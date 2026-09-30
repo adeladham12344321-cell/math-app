@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حلال مسائل التفاضل والتكامل</title>
+<!-- مكتبة تلجرام -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<!-- مكتبة MathJS لمعالجة الرياضيات -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+<!-- مكتبة Algebrite للحسابات الرمزية -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/algebrite/1.4.0/algebrite.bundle-for-browser.js"></script>
+<style>
+:root {
+--bg-color: var(--tg-theme-bg-color, #f4f6f9);
+--text-color: var(--tg-theme-text-color, #222222);
+--card-bg: var(--tg-theme-secondary-bg-color, #ffffff);
+--btn-color: var(--tg-theme-button-color, #2481cc);
+--btn-text: var(--tg-theme-button-text-color, #ffffff);
+}
+body {
+font-family: system-ui, -apple-system, sans-serif;
+background-color: var(--bg-color);
+color: var(--text-color);
+margin: 0;
+padding: 15px;
+box-sizing: border-box;
+direction: rtl;
+}
+.container {
+max-width: 450px;
+margin: 0 auto;
+}
+h2 {
+text-align: center;
+margin-bottom: 20px;
+font-size: 20px;
+}
+.card {
+background: var(--card-bg);
+padding: 20px;
+border-radius: 14px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+margin-bottom: 15px;
+}
+label {
+display: block;
+margin-bottom: 8px;
+font-weight: bold;
+font-size: 14px;
+}
+select, input {
+width: 100%;
+padding: 12px;
+border: 1px solid #ccc;
+border-radius: 8px;
+box-sizing: border-box;
+margin-bottom: 15px;
+font-size: 16px;
+direction: ltr;
+text-align: left;
+}
+button {
+width: 100%;
+padding: 14px;
+background-color: var(--btn-color);
+color: var(--btn-text);
+border: none;
+border-radius: 8px;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
+}
+.result-box {
+margin-top: 15px;
+padding: 15px;
+background-color: rgba(36, 129, 204, 0.1);
+border-right: 4px solid var(--btn-color);
+border-radius: 6px;
+font-size: 16px;
+word-break: break-all;
+direction: ltr;
+text-align: left;
+}
+.hint {
+font-size: 12px;
+color: #777;
+margin-top: -10px;
+margin-bottom: 15px;
+direction: rtl;
+text-align: right;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>🧮 حلال التفاضل والتكامل</h2>
+<div class="card">
+<label for="operation">اختر العملية:</label>
+<select id="operation">
+<option value="derivative">تفاضل (مشتقة أولى)</option>
+<option value="integral">تكامل غير محدود</option>
+</select>
+<label for="expression">أدخل الدالة الرياضية f(x):</label>
+<input type="text" id="expression" placeholder="مثال: x^2 + cos(x) + 3*x">
+<div class="hint">ملاحظة: استخدم * للضرب و ^ للأسس (مثل x^3).</div>
+<button onclick="solve()">احسب الحل</button>
+<div id="result-container" style="display: none;">
+<label style="margin-top:15px;">النتيجة:</label>
+<div id="result" class="result-box"></div>
+</div>
+</div>
+</div>
+<script>
+// تهيئة Telegram WebApp
+const tg = window.Telegram.WebApp;
+if (tg) {
+tg.expand();
+}
+function solve() {
+const op = document.getElementById('operation').value;
+const expr = document.getElementById('expression').value.trim();
+const resultDiv = document.getElementById('result');
+const resultContainer = document.getElementById('result-container');
+if (!expr) {
+alert("يرجى كتابة معادلة أولاً!");
+return;
+}
+try {
+let output = "";
+if (op === 'derivative') {
+// حساب المشتقة باستخدام Algebrite
+output = Algebrite.derivative(expr, 'x').toString();
+} else if (op === 'integral') {
+// حساب التكامل باستخدام Algebrite
+output = Algebrite.integral(expr, 'x').toString() + " + C";
+}
+resultDiv.innerText = output;
+resultContainer.style.display = "block";
+} catch (error) {
+resultDiv.innerText = "خطأ في صيغة المعادلة، يرجى التأكد من كتابتها بشكل صحيح.";
+resultContainer.style.display = "block";
+}
+}
+</script>
+</body>
+</html>
